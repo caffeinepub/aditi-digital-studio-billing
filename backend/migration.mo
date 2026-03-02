@@ -1,8 +1,9 @@
 import Map "mo:core/Map";
 import Nat "mo:core/Nat";
+import Float "mo:core/Float";
 
 module {
-  type InvoiceItem = {
+  type OldInvoiceItem = {
     description : Text;
     quantity : Nat;
     unitPrice : Float;
@@ -15,9 +16,8 @@ module {
     customerName : Text;
     customerAddress : Text;
     customerPhone : Text;
-    items : [InvoiceItem];
+    items : [OldInvoiceItem];
     subtotal : Float;
-    taxAmount : Float;
     total : Float;
     paid : Bool;
   };
@@ -33,10 +33,12 @@ module {
     customerName : Text;
     customerAddress : Text;
     customerPhone : Text;
-    items : [InvoiceItem];
+    items : [OldInvoiceItem];
     subtotal : Float;
     total : Float;
     paid : Bool;
+    paidAmount : Float;
+    balanceAmount : Float;
   };
 
   type NewActor = {
@@ -49,13 +51,11 @@ module {
       func(_id, oldInvoice) {
         {
           oldInvoice with
-          total = oldInvoice.subtotal;
+          paidAmount = 0.0;
+          balanceAmount = oldInvoice.total;
         };
       }
     );
-    {
-      old with
-      invoices = newInvoices;
-    };
+    { old with invoices = newInvoices };
   };
 };

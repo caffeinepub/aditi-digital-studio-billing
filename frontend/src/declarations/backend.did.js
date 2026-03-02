@@ -17,6 +17,7 @@ export const InvoiceItem = IDL.Record({
 export const Time = IDL.Int;
 export const InvoiceDTO = IDL.Record({
   'customerName' : IDL.Text,
+  'balanceAmount' : IDL.Float64,
   'total' : IDL.Float64,
   'customerPhone' : IDL.Text,
   'date' : Time,
@@ -24,12 +25,19 @@ export const InvoiceDTO = IDL.Record({
   'invoiceNumber' : IDL.Nat,
   'customerAddress' : IDL.Text,
   'items' : IDL.Vec(InvoiceItem),
+  'paidAmount' : IDL.Float64,
   'subtotal' : IDL.Float64,
 });
 
 export const idlService = IDL.Service({
   'createInvoice' : IDL.Func(
-      [IDL.Text, IDL.Text, IDL.Text, IDL.Vec(InvoiceItem)],
+      [
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Vec(InvoiceItem),
+        IDL.Opt(IDL.Float64),
+      ],
       [IDL.Nat],
       [],
     ),
@@ -51,6 +59,7 @@ export const idlFactory = ({ IDL }) => {
   const Time = IDL.Int;
   const InvoiceDTO = IDL.Record({
     'customerName' : IDL.Text,
+    'balanceAmount' : IDL.Float64,
     'total' : IDL.Float64,
     'customerPhone' : IDL.Text,
     'date' : Time,
@@ -58,12 +67,19 @@ export const idlFactory = ({ IDL }) => {
     'invoiceNumber' : IDL.Nat,
     'customerAddress' : IDL.Text,
     'items' : IDL.Vec(InvoiceItem),
+    'paidAmount' : IDL.Float64,
     'subtotal' : IDL.Float64,
   });
   
   return IDL.Service({
     'createInvoice' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, IDL.Vec(InvoiceItem)],
+        [
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Vec(InvoiceItem),
+          IDL.Opt(IDL.Float64),
+        ],
         [IDL.Nat],
         [],
       ),

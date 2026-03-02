@@ -1,6 +1,6 @@
 import { useParams, useNavigate, Link } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import { ArrowLeft, Printer, CheckCircle2, Clock } from 'lucide-react';
+import { ArrowLeft, Printer, CheckCircle2, Clock, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -54,6 +54,10 @@ export default function InvoiceDetail() {
     }
   };
 
+  const handleDownloadBill = () => {
+    window.print();
+  };
+
   const isToggling = markAsPaid.isPending || markAsUnpaid.isPending;
 
   if (isLoading) {
@@ -78,6 +82,9 @@ export default function InvoiceDetail() {
       </div>
     );
   }
+
+  const paidAmount = invoice.paidAmount ?? 0;
+  const balanceDue = Math.max(0, invoice.total - paidAmount);
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6 animate-fade-in">
@@ -120,11 +127,19 @@ export default function InvoiceDetail() {
             {invoice.paid ? 'Mark as Unpaid' : 'Mark as Paid'}
           </Button>
           <Button
+            variant="outline"
             onClick={() => window.print()}
-            className="bg-teal-gradient text-white hover:opacity-90 gap-2 font-medium"
+            className="gap-2 font-medium border-border hover:bg-accent"
           >
             <Printer className="w-4 h-4" />
             Print Invoice
+          </Button>
+          <Button
+            onClick={handleDownloadBill}
+            className="bg-amber-gradient text-white hover:opacity-90 gap-2 font-medium shadow-sm"
+          >
+            <Download className="w-4 h-4" />
+            Download Bill
           </Button>
         </div>
       </div>
@@ -214,6 +229,17 @@ export default function InvoiceDetail() {
               <div className="flex justify-between">
                 <span className="font-bold text-foreground text-base">Total</span>
                 <span className="font-bold text-primary text-xl">{formatCurrency(invoice.total)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm font-medium text-muted-foreground">Paid Amount</span>
+                <span className="text-sm font-semibold text-success">{formatCurrency(paidAmount)}</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between items-center rounded-lg bg-amber-50 border border-amber-200 px-3 py-2.5">
+                <span className="font-semibold text-amber-800 text-sm">Balance Due</span>
+                <span className={`font-bold text-base ${balanceDue > 0 ? 'text-amber-700' : 'text-success'}`}>
+                  {formatCurrency(balanceDue)}
+                </span>
               </div>
             </div>
           </div>

@@ -41,14 +41,22 @@ export function useCreateInvoice() {
       customerAddress,
       customerPhone,
       items,
+      paidAmount,
     }: {
       customerName: string;
       customerAddress: string;
       customerPhone: string;
       items: InvoiceItem[];
+      paidAmount?: number;
     }) => {
       if (!actor) throw new Error('Actor not initialized');
-      return actor.createInvoice(customerName, customerAddress, customerPhone, items);
+      return actor.createInvoice(
+        customerName,
+        customerAddress,
+        customerPhone,
+        items,
+        paidAmount !== undefined ? paidAmount : null
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [INVOICES_KEY] });

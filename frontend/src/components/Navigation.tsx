@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { LayoutDashboard, FileText, PlusCircle, Menu, X } from 'lucide-react';
+import { LayoutDashboard, FileText, PlusCircle, Menu, X, Phone } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -50,6 +50,12 @@ export default function Navigation() {
             </div>
           </Link>
 
+          {/* Mobile number (desktop) */}
+          <div className="hidden sm:flex items-center gap-1.5 text-sidebar-foreground/70 text-xs mr-2 md:mr-0">
+            <Phone className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+            <span>7888223449</span>
+          </div>
+
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
             {navLinks.map(({ to, label, icon: Icon, exact }) => (
@@ -83,6 +89,11 @@ export default function Navigation() {
       {/* Mobile Nav */}
       {mobileOpen && (
         <div className="md:hidden border-t border-sidebar-border bg-sidebar px-4 py-3 space-y-1">
+          {/* Mobile number in mobile menu */}
+          <div className="flex items-center gap-2 px-4 py-2 text-sidebar-foreground/60 text-sm">
+            <Phone className="w-4 h-4 text-amber-400 flex-shrink-0" />
+            <span>7888223449</span>
+          </div>
           {navLinks.map(({ to, label, icon: Icon, exact }) => (
             <Link
               key={to}

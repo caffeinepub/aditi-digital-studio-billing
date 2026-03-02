@@ -145,15 +145,68 @@
     display: block !important;
   }
 
+  /* Hide navigation, header, footer, and other chrome */
+  header,
+  nav,
+  footer,
+  [data-navigation],
+  [data-footer] {
+    display: none !important;
+  }
+
   body {
     background: white !important;
     color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
+  html {
+    background: white !important;
+  }
+
+  /* Remove page padding/margin wrappers */
+  main,
+  #root,
+  .min-h-screen {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: white !important;
+  }
+
+  /* Invoice card: clean, borderless, full-width */
   .print-invoice {
     box-shadow: none !important;
     border: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Ensure the invoice content area fills the page */
+  .print-invoice > * {
+    padding: 0 !important;
+  }
+
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 16mm 16mm 16mm 16mm;
+  }
+
+  /* Prevent table rows from breaking across pages */
+  tr {
+    page-break-inside: avoid;
+  }
+
+  /* Ensure table borders show in print */
+  table {
+    border-collapse: collapse !important;
+  }
+
+  th,
+  td {
+    border: 1px solid #e5e7eb !important;
   }
 }

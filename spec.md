@@ -1,12 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Remove all GST/tax fields, calculations, and references from the Aditi Digital Studio Billing application across both frontend and backend.
+**Goal:** Add "Paid Amount" and "Balance Due" fields to invoices across the backend data model, invoice creation form, invoice detail/print view, invoice list, and dashboard.
 
 **Planned changes:**
-- Remove tax rate input, tax amount line, and all GST-related fields from the Create Invoice form; invoice total equals subtotal only
-- Remove GST/tax rows and placeholders from the Invoice Detail page and InvoicePrintHeader component
-- Update the backend Motoko actor to remove the tax/GST field from the Invoice data model; store total as subtotal
-- Remove any tax-related stat cards or revenue calculations from the Dashboard page
+- Update the backend Motoko invoice data model to include `paidAmount` (optional input, defaults to 0) and `balanceAmount` (stored as total − paidAmount); update all retrieval functions to return these fields
+- Add a "Paid Amount" numeric input and a read-only "Balance Due" field (auto-calculated as total − paid amount) to the Create Invoice form totals section
+- Display "Paid Amount" and "Balance Due" rows in the Invoice Detail page totals section and in the printable invoice layout
+- Add a "Balance Due" or "Paid Amount" column/indicator to the Invoice List table
+- Ensure Dashboard stats handle the new fields gracefully with fallback to 0 for older invoices
 
-**User-visible outcome:** Invoices are created, displayed, and printed without any GST or tax fields. All totals reflect the subtotal of line items only, and the dashboard revenue stats contain no tax component.
+**User-visible outcome:** Users can enter a paid amount when creating an invoice and see the automatically calculated balance due on the invoice form, detail page, printed output, invoice list, and dashboard without any broken or NaN values.

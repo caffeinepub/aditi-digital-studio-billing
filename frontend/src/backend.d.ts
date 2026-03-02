@@ -15,6 +15,7 @@ export interface InvoiceItem {
 }
 export interface InvoiceDTO {
     customerName: string;
+    balanceAmount: number;
     total: number;
     customerPhone: string;
     date: Time;
@@ -22,11 +23,12 @@ export interface InvoiceDTO {
     invoiceNumber: bigint;
     customerAddress: string;
     items: Array<InvoiceItem>;
+    paidAmount: number;
     subtotal: number;
 }
 export type Time = bigint;
 export interface backendInterface {
-    createInvoice(customerName: string, customerAddress: string, customerPhone: string, items: Array<InvoiceItem>): Promise<bigint>;
+    createInvoice(customerName: string, customerAddress: string, customerPhone: string, items: Array<InvoiceItem>, paidAmount: number | null): Promise<bigint>;
     getAllInvoices(): Promise<Array<InvoiceDTO>>;
     getInvoice(invoiceNumber: bigint): Promise<InvoiceDTO>;
     markAsPaid(invoiceNumber: bigint): Promise<void>;

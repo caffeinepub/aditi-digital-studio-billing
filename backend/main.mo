@@ -5,6 +5,8 @@ import Array "mo:core/Array";
 import Time "mo:core/Time";
 import Text "mo:core/Text";
 import Migration "migration";
+import Nat "mo:core/Nat";
+import Float "mo:core/Float";
 
 (with migration = Migration.run)
 actor {
@@ -25,6 +27,8 @@ actor {
     subtotal : Float;
     total : Float;
     paid : Bool;
+    paidAmount : Float;
+    balanceAmount : Float;
   };
 
   type InvoiceDTO = {
@@ -37,6 +41,8 @@ actor {
     subtotal : Float;
     total : Float;
     paid : Bool;
+    paidAmount : Float;
+    balanceAmount : Float;
   };
 
   let invoices = Map.empty<Nat, Invoice>();
@@ -50,9 +56,14 @@ actor {
     customerName : Text,
     customerAddress : Text,
     customerPhone : Text,
-    items : [InvoiceItem]
+    items : [InvoiceItem],
+    paidAmount : ?Float
   ) : async Nat {
     let subtotal = items.foldLeft(0.0, func(acc, item) { acc + item.total });
+    let actualPaidAmount = switch (paidAmount) {
+      case (null) { 0.0 };
+      case (?amount) { amount };
+    };
 
     let invoice : Invoice = {
       invoiceNumber = nextInvoiceNumber;
@@ -64,6 +75,8 @@ actor {
       subtotal;
       total = subtotal;
       paid = false;
+      paidAmount = actualPaidAmount;
+      balanceAmount = subtotal - actualPaidAmount;
     };
 
     invoices.add(nextInvoiceNumber, invoice);

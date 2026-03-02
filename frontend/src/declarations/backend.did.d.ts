@@ -12,6 +12,7 @@ import type { Principal } from '@icp-sdk/core/principal';
 
 export interface InvoiceDTO {
   'customerName' : string,
+  'balanceAmount' : number,
   'total' : number,
   'customerPhone' : string,
   'date' : Time,
@@ -19,6 +20,7 @@ export interface InvoiceDTO {
   'invoiceNumber' : bigint,
   'customerAddress' : string,
   'items' : Array<InvoiceItem>,
+  'paidAmount' : number,
   'subtotal' : number,
 }
 export interface InvoiceItem {
@@ -30,7 +32,7 @@ export interface InvoiceItem {
 export type Time = bigint;
 export interface _SERVICE {
   'createInvoice' : ActorMethod<
-    [string, string, string, Array<InvoiceItem>],
+    [string, string, string, Array<InvoiceItem>, [] | [number]],
     bigint
   >,
   'getAllInvoices' : ActorMethod<[], Array<InvoiceDTO>>,

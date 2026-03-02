@@ -1,95 +1,101 @@
 {
   "kind": "build_request",
-  "title": "Remove GST/tax from invoice calculations and display",
+  "title": "Add paid amount and balance amount fields to invoices",
   "projectName": "Aditi Digital Studio Billing",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-5",
-      "text": "Remove all GST/tax fields, calculations, and references from the Create Invoice page. The form should no longer display a tax rate input, tax amount line, or any GST-related field. The invoice total should be calculated as subtotal only (sum of line items), with no tax applied.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-6"
-        ],
-        "quotes": [
-          "DO NOT ADD GST"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The Create Invoice form has no tax rate or GST input field",
-        "No tax amount is calculated or displayed during invoice creation",
-        "The invoice total equals the subtotal (sum of all line item quantities × unit prices)",
-        "No GST label or percentage is shown anywhere on the Create Invoice page"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Remove all GST/tax fields and references from the Invoice Detail page and the InvoicePrintHeader component. The printable invoice layout should not display any tax amount, GST number placeholder, or tax line. The total shown on the invoice should equal the subtotal with no tax deduction or addition.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-6"
-        ],
-        "quotes": [
-          "DO NOT ADD GST"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The Invoice Detail page shows no tax or GST row in the line items summary",
-        "The printed invoice layout shows no GST placeholder, tax amount, or tax rate",
-        "The invoice total displayed equals the subtotal of all line items",
-        "InvoicePrintHeader no longer contains any GST-related text or placeholder"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Update the backend Motoko actor so that the invoice data model no longer requires or stores a tax amount field. The createInvoice function should accept invoices without a tax field, and the total should be stored as equal to the subtotal.",
+      "id": "REQ-11",
+      "text": "Update the backend Motoko invoice data model to include two new fields: `paidAmount` (the amount paid so far, a numeric value) and `balanceAmount` (automatically calculated as total minus paidAmount). The `createInvoice` function should accept `paidAmount` as an optional input (defaulting to 0), and `balanceAmount` should be stored as `total - paidAmount`.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-4"
         ],
         "quotes": [
-          "DO NOT ADD GST"
+          "added paid amount and balance amount option"
         ]
       },
       "acceptanceCriteria": [
-        "The Invoice record type in the Motoko actor has no tax or gst field",
-        "The createInvoice function does not accept or store a tax amount",
-        "Invoice totals stored in the backend equal the subtotal of line items",
-        "All existing backend functions (getInvoice, getAllInvoices, markAsPaid, markAsUnpaid) continue to work correctly"
+        "The invoice record in Motoko stores a `paidAmount` field (Nat or Float).",
+        "The invoice record stores a `balanceAmount` field computed as total minus paidAmount.",
+        "`createInvoice` accepts `paidAmount` (optional, defaults to 0).",
+        "Existing invoice retrieval functions return the new fields.",
+        "Balance amount is correctly calculated and persisted."
       ]
     },
     {
-      "id": "REQ-8",
-      "text": "Update the Dashboard page to remove any display of tax-related stats or revenue calculations that previously included GST. Revenue totals shown on the dashboard should reflect subtotals (no tax component).",
+      "id": "REQ-12",
+      "text": "Update the Create Invoice page form to include a 'Paid Amount' input field. As the user types the paid amount, display a read-only 'Balance Due' field that auto-calculates as (total - paid amount). Both fields should appear in the totals section below the line items, styled consistently with the existing amber/teal theme.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-4"
         ],
         "quotes": [
-          "DO NOT ADD GST"
+          "added paid amount and balance amount option"
         ]
       },
       "acceptanceCriteria": [
-        "The Dashboard shows no GST or tax-related stat card or column",
-        "Total revenue displayed on the Dashboard is calculated from invoice subtotals/totals without any tax component"
+        "A numeric 'Paid Amount' input is shown in the totals section of the Create Invoice form.",
+        "A read-only 'Balance Due' field is shown, updating reactively as subtotal or paid amount changes.",
+        "Balance Due = total (subtotal) - paid amount.",
+        "Paid amount defaults to 0.",
+        "The `paidAmount` value is submitted to the backend when creating the invoice.",
+        "Fields are styled consistently with the amber/teal design theme."
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "text": "Update the Invoice Detail page and the printable invoice layout to display the 'Paid Amount' and 'Balance Due' fields. These should appear in the totals/summary section of the invoice detail view and in the printed invoice output generated by the InvoicePrintHeader/printable area. Style consistently with the existing theme; both fields should be visible on-screen and in the printed layout.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "added paid amount and balance amount option"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Invoice Detail page displays a 'Paid Amount' row in the totals section.",
+        "Invoice Detail page displays a 'Balance Due' row in the totals section.",
+        "Balance Due = total - paid amount.",
+        "The printable invoice layout (print/PDF output) includes both Paid Amount and Balance Due rows.",
+        "Fields are styled consistently with the amber/teal theme.",
+        "The 'Paid Amount' and 'Balance Due' rows are hidden from the printed layout only if the design requires it — otherwise they should appear in print as well."
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Update the Invoice List page and Dashboard summary stats to reflect the new paid/balance amounts where relevant. On the Invoice List, optionally show balance due in the table. On the Dashboard, ensure revenue or payment stats are consistent with the introduction of partial payments (paidAmount vs total).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "added paid amount and balance amount option"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Invoice List table shows 'Balance Due' or 'Paid Amount' as a column or within the row, clearly labeled.",
+        "Dashboard stats remain accurate and do not break with the new fields.",
+        "No undefined or NaN values appear for invoices created before the new fields were added (graceful fallback to 0)."
       ]
     }
   ],
   "constraints": [
-    "Do not modify any files under frontend/src/hooks/ (immutable paths)",
-    "Do not modify frontend/src/components/ui/ (immutable paths)",
-    "Do not modify frontend/src/main.tsx (immutable path)",
-    "Preserve all existing invoice fields except tax/GST-related ones"
+    "Do not modify files listed in frontend.immutablePaths.",
+    "All Motoko logic must remain in the single backend/main.mo actor.",
+    "Do not re-introduce any GST/tax fields or calculations.",
+    "Balance Due must always be calculated as total minus paidAmount — never stored independently of those two values in the UI."
   ],
   "nonGoals": [
-    "Adding any new tax system or alternative tax scheme",
-    "Changing the visual theme or color palette",
-    "Modifying the shop identity display (name, address)",
-    "Adding or removing any invoice fields other than tax/GST"
+    "Partial payment history or payment tracking over time.",
+    "Multiple payment entries per invoice.",
+    "Payment method or transaction reference fields.",
+    "Any changes to the existing amber/teal visual theme beyond adding the new fields."
   ],
   "imageRequirements": {
     "required": [],

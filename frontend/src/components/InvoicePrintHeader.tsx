@@ -1,3 +1,5 @@
+import { Phone } from 'lucide-react';
+
 export default function InvoicePrintHeader() {
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b-2 border-amber-500/30 mb-6">
@@ -20,6 +22,10 @@ export default function InvoicePrintHeader() {
         <div>
           <h1 className="text-2xl font-display font-bold text-foreground">Aditi Digital Studio</h1>
           <p className="text-muted-foreground text-sm mt-0.5">Virar - 401305, Maharashtra, India</p>
+          <p className="text-muted-foreground text-sm mt-0.5 flex items-center gap-1.5">
+            <Phone className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
+            <span>7888223449</span>
+          </p>
         </div>
       </div>
       <div className="text-right">

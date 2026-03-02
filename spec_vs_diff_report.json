@@ -1,31 +1,16 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-03-02T03:20:52.147Z",
-  "summary": "The diff implements all four requirements (REQ-5 through REQ-8) with good coverage. The backend removes the tax field from the Invoice record and createInvoice function, the frontend removes GST/tax from CreateInvoice, InvoiceDetail, and InvoicePrintHeader. However, the hooks file (useQueries.ts) was modified despite being listed as an immutable path constraint, and REQ-8 (Dashboard tax removal) is only mentioned in file summaries without direct diff evidence of the Dashboard page changes.",
-  "missing_requirements": [
-    {
-      "id": "REQ-8",
-      "requirement": "Update the Dashboard page to remove any display of tax-related stats or revenue calculations that previously included GST. Revenue totals shown on the dashboard should reflect subtotals (no tax component).",
-      "reason": "The diff does not include a direct content diff for frontend/src/pages/Dashboard.tsx. Only the file summary mentions fixes to Link navigation but no explicit evidence of tax/GST removal from the Dashboard page is shown in the diff content.",
-      "evidence": [
-        "frontend-file-summaries.txt"
-      ]
-    }
-  ],
+  "generatedAt": "2026-03-02T03:57:17.782Z",
+  "summary": "The diff implements all four requirements (REQ-11 through REQ-14) with good coverage. The backend Motoko model is updated with paidAmount and balanceAmount fields, createInvoice accepts optional paidAmount, migration module handles existing invoices, and all frontend pages (Create Invoice, Invoice Detail, Invoice List, Dashboard) are updated accordingly. Minor gaps exist around the Invoice List Balance Due column visibility and printable layout completeness, but overall the implementation appears solid.",
+  "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Modification of frontend/src/hooks/useQueries.ts",
-      "reason": "The build request explicitly lists frontend/src/hooks/ as an immutable path that must not be modified. The diff shows this file was modified, removing tax-related mutation parameters from useCreateInvoice.",
+      "description": "A separate migration.mo module was added as a new file",
+      "reason": "The build request constraint states all Motoko logic must remain in the single backend/main.mo actor. The migration module is implemented as a separate file (backend/migration.mo), which may violate this constraint.",
       "evidence": [
-        "frontend/src/hooks/useQueries.ts"
-      ]
-    },
-    {
-      "description": "Addition of a backend migration module (backend/migration.mo)",
-      "reason": "The build request does not request any data migration module or migration infrastructure. Adding migration.mo with OldActor/NewActor types and a run function was not requested.",
-      "evidence": [
-        "backend/migration.mo"
+        "backend/migration.mo",
+        "backend/main.mo"
       ]
     }
   ],
@@ -34,10 +19,11 @@
     "backend/main.mo",
     "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/InvoicePrintHeader.tsx",
     "frontend/src/hooks/useQueries.ts",
     "frontend/src/pages/CreateInvoice.tsx",
+    "frontend/src/pages/Dashboard.tsx",
     "frontend/src/pages/InvoiceDetail.tsx",
+    "frontend/src/pages/InvoiceList.tsx",
     "project_state.json"
   ]
 }

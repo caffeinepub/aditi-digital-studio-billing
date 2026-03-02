@@ -97,6 +97,7 @@ export interface InvoiceItem {
 }
 export interface InvoiceDTO {
     customerName: string;
+    balanceAmount: number;
     total: number;
     customerPhone: string;
     date: Time;
@@ -104,11 +105,12 @@ export interface InvoiceDTO {
     invoiceNumber: bigint;
     customerAddress: string;
     items: Array<InvoiceItem>;
+    paidAmount: number;
     subtotal: number;
 }
 export type Time = bigint;
 export interface backendInterface {
-    createInvoice(customerName: string, customerAddress: string, customerPhone: string, items: Array<InvoiceItem>): Promise<bigint>;
+    createInvoice(customerName: string, customerAddress: string, customerPhone: string, items: Array<InvoiceItem>, paidAmount: number | null): Promise<bigint>;
     getAllInvoices(): Promise<Array<InvoiceDTO>>;
     getInvoice(invoiceNumber: bigint): Promise<InvoiceDTO>;
     markAsPaid(invoiceNumber: bigint): Promise<void>;
@@ -116,17 +118,17 @@ export interface backendInterface {
 }
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async createInvoice(arg0: string, arg1: string, arg2: string, arg3: Array<InvoiceItem>): Promise<bigint> {
+    async createInvoice(arg0: string, arg1: string, arg2: string, arg3: Array<InvoiceItem>, arg4: number | null): Promise<bigint> {
         if (this.processError) {
             try {
-                const result = await this.actor.createInvoice(arg0, arg1, arg2, arg3);
+                const result = await this.actor.createInvoice(arg0, arg1, arg2, arg3, to_candid_opt_n1(this._uploadFile, this._downloadFile, arg4));
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.createInvoice(arg0, arg1, arg2, arg3);
+            const result = await this.actor.createInvoice(arg0, arg1, arg2, arg3, to_candid_opt_n1(this._uploadFile, this._downloadFile, arg4));
             return result;
         }
     }
@@ -186,6 +188,9 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+}
+function to_candid_opt_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: number | null): [] | [number] {
+    return value === null ? candid_none() : candid_some(value);
 }
 export interface CreateActorOptions {
     agent?: Agent;

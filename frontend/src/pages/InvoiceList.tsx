@@ -185,50 +185,62 @@ export default function InvoiceList() {
                     <TableHead className="font-semibold text-muted-foreground text-right">
                       <SortButton field="total" label="Total" />
                     </TableHead>
+                    <TableHead className="font-semibold text-muted-foreground text-right hidden md:table-cell">
+                      Balance Due
+                    </TableHead>
                     <TableHead className="font-semibold text-muted-foreground">Status</TableHead>
                     <TableHead className="font-semibold text-muted-foreground text-right">Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filtered.map((invoice) => (
-                    <TableRow
-                      key={invoice.invoiceNumber.toString()}
-                      className="hover:bg-accent/40 transition-colors"
-                    >
-                      <TableCell className="font-semibold text-primary">
-                        #{invoice.invoiceNumber.toString().padStart(4, '0')}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground text-sm">
-                        {formatDate(invoice.date)}
-                      </TableCell>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium text-foreground text-sm">{invoice.customerName}</p>
-                          <p className="text-xs text-muted-foreground">{invoice.customerPhone}</p>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground text-sm hidden sm:table-cell">
-                        {invoice.items.length} item{invoice.items.length !== 1 ? 's' : ''}
-                      </TableCell>
-                      <TableCell className="text-right font-semibold text-foreground">
-                        {formatCurrency(invoice.total)}
-                      </TableCell>
-                      <TableCell>
-                        <InvoiceStatusBadge paid={invoice.paid} size="sm" />
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Link
-                          to="/invoices/$invoiceNumber"
-                          params={{ invoiceNumber: invoice.invoiceNumber.toString() }}
-                        >
-                          <Button variant="ghost" size="sm" className="gap-1.5 text-primary hover:text-primary hover:bg-primary/10">
-                            <Eye className="w-3.5 h-3.5" />
-                            View
-                          </Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {filtered.map((invoice) => {
+                    const paidAmt = invoice.paidAmount ?? 0;
+                    const balance = Math.max(0, invoice.total - paidAmt);
+                    return (
+                      <TableRow
+                        key={invoice.invoiceNumber.toString()}
+                        className="hover:bg-accent/40 transition-colors"
+                      >
+                        <TableCell className="font-semibold text-primary">
+                          #{invoice.invoiceNumber.toString().padStart(4, '0')}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground text-sm">
+                          {formatDate(invoice.date)}
+                        </TableCell>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium text-foreground text-sm">{invoice.customerName}</p>
+                            <p className="text-xs text-muted-foreground">{invoice.customerPhone}</p>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground text-sm hidden sm:table-cell">
+                          {invoice.items.length} item{invoice.items.length !== 1 ? 's' : ''}
+                        </TableCell>
+                        <TableCell className="text-right font-semibold text-foreground">
+                          {formatCurrency(invoice.total)}
+                        </TableCell>
+                        <TableCell className="text-right hidden md:table-cell">
+                          <span className={`font-semibold text-sm ${balance > 0 ? 'text-amber-600' : 'text-success'}`}>
+                            {formatCurrency(balance)}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <InvoiceStatusBadge paid={invoice.paid} size="sm" />
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Link
+                            to="/invoices/$invoiceNumber"
+                            params={{ invoiceNumber: invoice.invoiceNumber.toString() }}
+                          >
+                            <Button variant="ghost" size="sm" className="gap-1.5 text-primary hover:text-primary hover:bg-primary/10">
+                              <Eye className="w-3.5 h-3.5" />
+                              View
+                            </Button>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </div>

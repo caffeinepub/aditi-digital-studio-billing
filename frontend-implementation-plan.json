@@ -1,59 +1,64 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Remove GST/tax from invoice calculations and display",
+  "title": "Add paid amount and balance amount fields to invoices",
   "requirements": [
     {
-      "id": "REQ-5",
-      "summary": "Remove all GST/tax fields, calculations, and references from the Create Invoice page",
+      "id": "REQ-12",
+      "summary": "Add Paid Amount input and auto-calculated Balance Due field to Create Invoice form",
       "acceptanceCriteria": [
-        "The Create Invoice form has no tax rate or GST input field",
-        "No tax amount is calculated or displayed during invoice creation",
-        "The invoice total equals the subtotal (sum of all line item quantities × unit prices)",
-        "No GST label or percentage is shown anywhere on the Create Invoice page"
+        "A numeric 'Paid Amount' input is shown in the totals section of the Create Invoice form.",
+        "A read-only 'Balance Due' field is shown, updating reactively as subtotal or paid amount changes.",
+        "Balance Due = total (subtotal) - paid amount.",
+        "Paid amount defaults to 0.",
+        "The `paidAmount` value is submitted to the backend when creating the invoice.",
+        "Fields are styled consistently with the amber/teal design theme."
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/CreateInvoice.tsx",
           "operation": "modify",
-          "description": "Remove the tax rate state and input field from the form. Remove the tax calculation logic (subtotal * taxRate / 100). Update the total calculation to equal the subtotal directly. Remove any GST-related labels, form fields, or display elements. Ensure the createInvoice mutation no longer passes a tax parameter."
+          "description": "Add paidAmount state (number, defaulting to 0) and a computed balanceDue value (subtotal - paidAmount). Add a Paid Amount numeric input field in the totals section below line items. Add a read-only Balance Due display field that updates reactively when subtotal or paidAmount changes. Pass paidAmount (or null if 0) to the createInvoice backend method when submitting the form. Style both fields consistently with the existing amber/teal theme and totals section design."
         }
       ]
     },
     {
-      "id": "REQ-6",
-      "summary": "Remove all GST/tax fields and references from the Invoice Detail page and InvoicePrintHeader component",
+      "id": "REQ-13",
+      "summary": "Display Paid Amount and Balance Due on Invoice Detail page and in printable invoice layout",
       "acceptanceCriteria": [
-        "The Invoice Detail page shows no tax or GST row in the line items summary",
-        "The printed invoice layout shows no GST placeholder, tax amount, or tax rate",
-        "The invoice total displayed equals the subtotal of all line items",
-        "InvoicePrintHeader no longer contains any GST-related text or placeholder"
+        "Invoice Detail page displays a 'Paid Amount' row in the totals section.",
+        "Invoice Detail page displays a 'Balance Due' row in the totals section.",
+        "Balance Due = total - paid amount.",
+        "The printable invoice layout (print/PDF output) includes both Paid Amount and Balance Due rows.",
+        "Fields are styled consistently with the amber/teal theme.",
+        "The 'Paid Amount' and 'Balance Due' rows are hidden from the printed layout only if the design requires it — otherwise they should appear in print as well."
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/InvoiceDetail.tsx",
           "operation": "modify",
-          "description": "Remove any display of tax amounts or GST rows from the invoice summary table. Ensure the total displayed equals the subtotal with no tax deduction or addition. Remove any references to invoice.tax or GST calculations in the component."
-        },
-        {
-          "path": "frontend/src/components/InvoicePrintHeader.tsx",
-          "operation": "modify",
-          "description": "Remove the GST placeholder text and any GST-related content from the shop header. Keep only the shop name, address, phone, and email. Ensure the printable header no longer displays any tax identification or GST reference."
+          "description": "Add two new rows in the totals/summary section: one displaying 'Paid Amount' with the invoice.paidAmount value, and one displaying 'Balance Due' calculated as (invoice.total - invoice.paidAmount). Ensure both rows appear in the on-screen detail view and in the printable layout (within the print styles). Style consistently with the existing totals section and amber/teal theme. Handle graceful fallback for invoices where paidAmount may be undefined (default to 0)."
         }
       ]
     },
     {
-      "id": "REQ-8",
-      "summary": "Update the Dashboard page to remove any display of tax-related stats or revenue calculations that previously included GST",
+      "id": "REQ-14",
+      "summary": "Update Invoice List and Dashboard to display balance/paid amounts and ensure stats remain accurate",
       "acceptanceCriteria": [
-        "The Dashboard shows no GST or tax-related stat card or column",
-        "Total revenue displayed on the Dashboard is calculated from invoice subtotals/totals without any tax component"
+        "Invoice List table shows 'Balance Due' or 'Paid Amount' as a column or within the row, clearly labeled.",
+        "Dashboard stats remain accurate and do not break with the new fields.",
+        "No undefined or NaN values appear for invoices created before the new fields were added (graceful fallback to 0)."
       ],
       "file_operations": [
         {
+          "path": "frontend/src/pages/InvoiceList.tsx",
+          "operation": "modify",
+          "description": "Add a 'Balance Due' column to the invoice table displaying (invoice.total - invoice.paidAmount) for each invoice. Ensure the column is clearly labeled and styled consistently with the existing table columns. Handle undefined paidAmount values gracefully by defaulting to 0 to avoid NaN or undefined display issues."
+        },
+        {
           "path": "frontend/src/pages/Dashboard.tsx",
           "operation": "modify",
-          "description": "Ensure revenue calculations use invoice.total values directly without any separate tax component. Remove any stat cards, columns, or displays that previously showed GST or tax information. Verify that the total revenue calculation reflects subtotals only."
+          "description": "Review and update the revenue calculation logic to account for paidAmount if necessary, ensuring stats remain accurate. If the revenue stat currently sums invoice.total, consider whether it should instead sum invoice.paidAmount to reflect actual revenue received. Add graceful fallback logic to treat missing paidAmount as 0 to prevent NaN or undefined values in the summary stats. Optionally display total outstanding balance across all invoices in a new stat card."
         }
       ]
     }
