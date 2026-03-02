@@ -1,0 +1,42 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-remove-all-gst-tax-fields-calculations-and-references-from-the-create-invoice-page-the-form-should-no-longer-display-a-tax-rate-input-tax-amount-line-or-any-gst-related-field-the-invoice-total-should-be-calculated-as-subtotal-only-sum-of-line-items-with-no-tax-applied",
+      "featureTitle": "Remove all GST/tax fields, calculations, and references from the Create Invoice page. The form should no longer display a tax rate input, tax amount line, or any GST-related field. The invoice total should be calculated as subtotal only (sum of line items), with no tax applied.",
+      "files": [
+        "frontend/src/pages/CreateInvoice.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-remove-all-gst-tax-fields-and-references-from-the-invoice-detail-page-and-the-invoiceprintheader-component-the-printable-invoice-layout-should-not-display-any-tax-amount-gst-number-placeholder-or-tax-line-the-total-shown-on-the-invoice-should-equal-the-subtotal-with-no-tax-deduction-or-addition",
+      "featureTitle": "Remove all GST/tax fields and references from the Invoice Detail page and the InvoicePrintHeader component. The printable invoice layout should not display any tax amount, GST number placeholder, or tax line. The total shown on the invoice should equal the subtotal with no tax deduction or addition.",
+      "files": [
+        "frontend/src/components/InvoicePrintHeader.tsx",
+        "frontend/src/pages/InvoiceDetail.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Remove GST/tax from invoice calculations and display",
+  "requirements": [
+    {
+      "id": "REQ-5",
+      "summary": "Remove all GST/tax fields, calculations, and references from the Create Invoice page",
+      "acceptanceCriteria": [
+        "The Create Invoice form has no tax rate or GST input field",
+        "No tax amount is calculated or displayed during invoice creation",
+        "The invoice total equals the subtotal (sum of all line item quantities × unit prices)",
+        "No GST label or percentage is shown anywhere on the Create Invoice page"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/CreateInvoice.tsx",
+          "operation": "modify",
+          "description": "Remove the tax rate state and input field from the form. Remove the tax calculation logic (subtotal * taxRate / 100). Update the total calculation to equal the subtotal directly. Remove any GST-related labels, form fields, or display elements. Ensure the createInvoice mutation no longer passes a tax parameter."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Remove all GST/tax fields and references from the Invoice Detail page and InvoicePrintHeader component",
+      "acceptanceCriteria": [
+        "The Invoice Detail page shows no tax or GST row in the line items summary",
+        "The printed invoice layout shows no GST placeholder, tax amount, or tax rate",
+        "The invoice total displayed equals the subtotal of all line items",
+        "InvoicePrintHeader no longer contains any GST-related text or placeholder"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/InvoiceDetail.tsx",
+          "operation": "modify",
+          "description": "Remove any display of tax amounts or GST rows from the invoice summary table. Ensure the total displayed equals the subtotal with no tax deduction or addition. Remove any references to invoice.tax or GST calculations in the component."
+        },
+        {
+          "path": "frontend/src/components/InvoicePrintHeader.tsx",
+          "operation": "modify",
+          "description": "Remove the GST placeholder text and any GST-related content from the shop header. Keep only the shop name, address, phone, and email. Ensure the printable header no longer displays any tax identification or GST reference."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Update the Dashboard page to remove any display of tax-related stats or revenue calculations that previously included GST",
+      "acceptanceCriteria": [
+        "The Dashboard shows no GST or tax-related stat card or column",
+        "Total revenue displayed on the Dashboard is calculated from invoice subtotals/totals without any tax component"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Dashboard.tsx",
+          "operation": "modify",
+          "description": "Ensure revenue calculations use invoice.total values directly without any separate tax component. Remove any stat cards, columns, or displays that previously showed GST or tax information. Verify that the total revenue calculation reflects subtotals only."
+        }
+      ]
+    }
+  ]
+}

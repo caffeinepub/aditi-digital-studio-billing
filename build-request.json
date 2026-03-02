@@ -1,0 +1,98 @@
+{
+  "kind": "build_request",
+  "title": "Remove GST/tax from invoice calculations and display",
+  "projectName": "Aditi Digital Studio Billing",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-5",
+      "text": "Remove all GST/tax fields, calculations, and references from the Create Invoice page. The form should no longer display a tax rate input, tax amount line, or any GST-related field. The invoice total should be calculated as subtotal only (sum of line items), with no tax applied.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "DO NOT ADD GST"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Create Invoice form has no tax rate or GST input field",
+        "No tax amount is calculated or displayed during invoice creation",
+        "The invoice total equals the subtotal (sum of all line item quantities × unit prices)",
+        "No GST label or percentage is shown anywhere on the Create Invoice page"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Remove all GST/tax fields and references from the Invoice Detail page and the InvoicePrintHeader component. The printable invoice layout should not display any tax amount, GST number placeholder, or tax line. The total shown on the invoice should equal the subtotal with no tax deduction or addition.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "DO NOT ADD GST"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Invoice Detail page shows no tax or GST row in the line items summary",
+        "The printed invoice layout shows no GST placeholder, tax amount, or tax rate",
+        "The invoice total displayed equals the subtotal of all line items",
+        "InvoicePrintHeader no longer contains any GST-related text or placeholder"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Update the backend Motoko actor so that the invoice data model no longer requires or stores a tax amount field. The createInvoice function should accept invoices without a tax field, and the total should be stored as equal to the subtotal.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "DO NOT ADD GST"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Invoice record type in the Motoko actor has no tax or gst field",
+        "The createInvoice function does not accept or store a tax amount",
+        "Invoice totals stored in the backend equal the subtotal of line items",
+        "All existing backend functions (getInvoice, getAllInvoices, markAsPaid, markAsUnpaid) continue to work correctly"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Update the Dashboard page to remove any display of tax-related stats or revenue calculations that previously included GST. Revenue totals shown on the dashboard should reflect subtotals (no tax component).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "DO NOT ADD GST"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Dashboard shows no GST or tax-related stat card or column",
+        "Total revenue displayed on the Dashboard is calculated from invoice subtotals/totals without any tax component"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify any files under frontend/src/hooks/ (immutable paths)",
+    "Do not modify frontend/src/components/ui/ (immutable paths)",
+    "Do not modify frontend/src/main.tsx (immutable path)",
+    "Preserve all existing invoice fields except tax/GST-related ones"
+  ],
+  "nonGoals": [
+    "Adding any new tax system or alternative tax scheme",
+    "Changing the visual theme or color palette",
+    "Modifying the shop identity display (name, address)",
+    "Adding or removing any invoice fields other than tax/GST"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

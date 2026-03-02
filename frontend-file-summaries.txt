@@ -1,0 +1,14 @@
+{
+  "frontend/src/index.css": "Global styles with OKLCH color system featuring golden-amber primary and deep teal secondary palette, Plus Jakarta Sans typography, custom utility classes for gradients and shadows, and print-specific styles for invoice printing.",
+  "frontend/tailwind.config.js": "Extended Tailwind config with Plus Jakarta Sans and Playfair Display fonts, custom amber/teal color scales, enhanced border radius, card shadow utilities, and fade-in animation.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations — fetching all invoices, fetching a single invoice by number, creating invoices (without tax/GST), and toggling paid/unpaid status with automatic cache invalidation.",
+  "frontend/src/App.tsx": "Main app with TanStack Router setup defining routes for Dashboard (/), Invoice List (/invoices), Create Invoice (/invoices/create), and Invoice Detail (/invoices/:invoiceNumber), with shared layout including Navigation, footer with attribution, and Sonner toaster.",
+  "frontend/src/components/Navigation.tsx": "Sticky top navigation bar displaying the Aditi Digital Studio logo, shop name, and address with responsive desktop/mobile nav links to Dashboard, Invoices, and New Invoice pages.",
+  "frontend/src/components/InvoiceStatusBadge.tsx": "Reusable badge component rendering green \"Paid\" or amber \"Unpaid\" status indicators with dot icons, supporting sm and md sizes.",
+  "frontend/src/components/InvoicePrintHeader.tsx": "Reusable invoice print header showing the shop logo, \"Aditi Digital Studio\" name, and Virar address — GST placeholder line removed.",
+  "frontend/src/components/LineItemsInput.tsx": "Dynamic line items editor allowing add/remove of rows with description, quantity, and unit price fields; auto-calculates per-row totals and emits changes to parent.",
+  "frontend/src/pages/Dashboard.tsx": "Dashboard page showing summary stat cards and a recent invoices list; fixes the typed Link navigation to use `to=\"/invoices/$invoiceNumber\"` with a `params` prop instead of a template literal string.",
+  "frontend/src/pages/InvoiceList.tsx": "Full invoice list page with search, status filters, and a sortable table; fixes the typed Link navigation to use `to=\"/invoices/$invoiceNumber\"` with a `params` prop instead of a template literal string.",
+  "frontend/src/pages/CreateInvoice.tsx": "Invoice creation form with customer details fields, dynamic line items editor, auto-calculated total (no GST/tax), validation, and backend submission with navigation to the new invoice on success.",
+  "frontend/src/pages/InvoiceDetail.tsx": "Invoice detail page showing a printable invoice document with shop header, customer info, line items table, total (no GST row), status badge, and action buttons to toggle paid status or print the invoice."
+}

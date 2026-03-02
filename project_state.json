@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "Build a billing/invoice website for a shop named 'Aditi Digital Studio' located in Virar-401305, India.",
+  "architectural_notes": [
+    "Business: Aditi Digital Studio, Virar-401305, India — billing/invoice web app",
+    "No GST or tax should be applied to invoices — tax fields must be removed from all invoice forms, calculations, and printed layouts"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-build-a-multi-page-frontend-for-the-billing-website-with-the-following-pages-1-dashboard-showing-summary-stats-total-invoices-total-revenue-paid-vs-unpaid-counts-2-invoice-list-page-showing-all-invoices-in-a-sortable-table-with-status-badges-3-create-invoice-page-with-a-form-to-fill-in-customer-details-and-add-remove-line-items-dynamically-auto-calculating-subtotal-tax-18-gst-default-and-total-4-invoice-detail-view-page-showing-a-printable-invoice-layout-with-shop-header",
+      "title": "Build a multi-page frontend for the billing website with the following pages: (1) Dashboard showing summary stats (total invoices, total revenue, paid vs unpaid counts), (2) Invoice List page showing all invoices in a sortable table with status badges, (3) Create Invoice page with a form to fill in customer details and add/remove line items dynamically — auto-calculating subtotal, tax (18% GST default), and total, (4) Invoice Detail/View page showing a printable invoice layout with shop header.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-shop-identity-aditi-digital-studio-address-virar-401305-india-prominently-in-the-site-header-invoice-header-and-printed-invoice-layout",
+      "title": "Display the shop identity — 'Aditi Digital Studio', address: Virar - 401305, India — prominently in the site header, invoice header, and printed invoice layout.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-professional-warm-and-modern-visual-theme-across-the-entire-website-use-a-color-palette-inspired-by-golden-amber-and-deep-teal-tones-with-clean-white-backgrounds-use-crisp-sans-serif-typography-card-based-layouts-and-subtle-shadows-to-convey-a-trustworthy-professional-billing-service-aesthetic-consistent-throughout-all-pages",
+      "title": "Apply a professional, warm, and modern visual theme across the entire website. Use a color palette inspired by golden-amber and deep teal tones with clean white backgrounds. Use crisp sans-serif typography, card-based layouts, and subtle shadows to convey a trustworthy, professional billing service aesthetic consistent throughout all pages.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-all-gst-tax-fields-calculations-and-references-from-the-create-invoice-page-the-form-should-no-longer-display-a-tax-rate-input-tax-amount-line-or-any-gst-related-field-the-invoice-total-should-be-calculated-as-subtotal-only-sum-of-line-items-with-no-tax-applied",
+      "title": "Remove all GST/tax fields, calculations, and references from the Create Invoice page. The form should no longer display a tax rate input, tax amount line, or any GST-related field. The invoice total should be calculated as subtotal only (sum of line items), with no tax applied.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-all-gst-tax-fields-and-references-from-the-invoice-detail-page-and-the-invoiceprintheader-component-the-printable-invoice-layout-should-not-display-any-tax-amount-gst-number-placeholder-or-tax-line-the-total-shown-on-the-invoice-should-equal-the-subtotal-with-no-tax-deduction-or-addition",
+      "title": "Remove all GST/tax fields and references from the Invoice Detail page and the InvoicePrintHeader component. The printable invoice layout should not display any tax amount, GST number placeholder, or tax line. The total shown on the invoice should equal the subtotal with no tax deduction or addition.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Billing website for Aditi Digital Studio, Virar-401305, India",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Create a billing/invoice management backend with a single Motoko actor that supports: creating new invoices (with fields: invoice number, date, customer name, customer address, customer phone, list of items with description/quantity/unit price, subtotal, tax amount, total), listing all invoices, retrieving a single invoice by ID, and marking an invoice as paid or unpaid.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Remove GST/tax from invoice calculations — no tax should be applied or displayed on invoices",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Update the backend Motoko actor so that the invoice data model no longer requires or stores a tax amount field. The createInvoice function should accept invoices without a tax field, and the total should be stored as equal to the subtotal.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Update the Dashboard page to remove any display of tax-related stats or revenue calculations that previously included GST. Revenue totals shown on the dashboard should reflect subtotals (no tax component).",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Aditi Digital Studio Billing",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
